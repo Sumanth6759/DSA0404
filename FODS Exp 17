@@ -1,0 +1,22 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+try:
+    # Added encoding='latin1' to handle non-UTF-8 characters in the CSV
+    df = pd.read_csv('17customer_reviews.csv', encoding='latin1')
+
+    # Using 'Review Text' based on your dataset structure
+    review = df['Review Text'].dropna().str.lower().str.split().explode().value_counts()
+    remove = ["the", "and", "is", "a", "to", "it", "i", "in", "of", "was", "this"]
+    rem_w = review[~review.index.isin(remove)]
+    print(rem_w)
+    print(rem_w.nlargest(5))
+
+    review = rem_w.nlargest(5)
+    plt.bar(review.index, review.values)
+    plt.xlabel("Words")
+    plt.ylabel("Frequency")
+    plt.title("Most Frequent Words")
+    plt.show()
+except FileNotFoundError:
+    print("Error: '17customer_reviews.csv' was not found. Please verify the file name.")
