@@ -1,0 +1,45 @@
+import pandas as pd
+import re
+from collections import Counter
+import matplotlib.pyplot as plt
+
+# Load the dataset
+df = pd.read_excel("16bbc-text.xlsx")
+
+# Extract text data
+text_data = df['text'].dropna()
+
+# Combine all reviews into one text
+text = " ".join(text_data)
+
+# Convert text into lowercase
+text = text.lower()
+
+# Remove punctuation and extract words
+words = re.findall(r'\b[a-z]+\b', text)
+
+# Calculate word frequency
+word_frequency = Counter(words)
+
+# Display word frequency
+print("Word Frequency Distribution:")
+
+for word, frequency in word_frequency.most_common(20):
+    print(word, ":", frequency)
+
+# Create bar chart for top 10 words
+top_words = word_frequency.most_common(10)
+
+words_list = [item[0] for item in top_words]
+frequency_list = [item[1] for item in top_words]
+
+plt.figure(figsize=(10, 5))
+plt.bar(words_list, frequency_list, color='blue')
+
+plt.title("Top 10 Most Frequent Words")
+plt.xlabel("Words")
+plt.ylabel("Frequency")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
