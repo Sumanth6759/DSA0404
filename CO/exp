@@ -1,0 +1,36 @@
+import pandas as pd
+
+# Load the uploaded dataset
+df = pd.read_excel("Sales (1).xlsx")
+
+# Get item prices and quantities from dataset
+prices = df["Price"].head(5).tolist()
+quantities = df["Quantity_Sold"].head(5).tolist()
+
+# Discount rate from dataset (average discount)
+discount_rate = df["Discount"].head(5).mean() * 100
+
+# Tax rate (assumed 5%)
+tax_rate = 5
+
+# Calculate subtotal
+subtotal = sum(prices[i] * quantities[i]
+               for i in range(len(prices)))
+
+# Calculate discount
+discount = subtotal * discount_rate / 100
+
+# Amount after discount
+discounted_amount = subtotal - discount
+
+# Calculate tax
+tax = discounted_amount * tax_rate / 100
+
+# Final cost
+total_cost = discounted_amount + tax
+
+print("Subtotal:", round(subtotal, 2))
+print("Discount:", round(discount, 2))
+print("Amount After Discount:", round(discounted_amount, 2))
+print("Tax:", round(tax, 2))
+print("Total Cost:", round(total_cost, 2))
